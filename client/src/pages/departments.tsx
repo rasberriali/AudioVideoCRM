@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -28,7 +28,7 @@ import {
   SelectTrigger, 
   SelectValue 
 } from "@/components/ui/select";
-import { Checkbox } from "../components/ui/checkbox";
+// import { Checkbox } from "../components/ui/checkbox";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -45,7 +45,7 @@ import {
   Crown
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { apiRequest } from "@/lib/queryClient";
+// import { apiRequest } from "@/lib/queryClient";
 
 // Department configuration with icons and permissions
 const DEPARTMENTS = {

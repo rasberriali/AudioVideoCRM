@@ -96,6 +96,8 @@ export function Sidebar() {
 
   return (
     <>
+
+
       {/* Sidebar */}
       <aside
   className={`
@@ -114,6 +116,7 @@ export function Sidebar() {
     <PanelLeft className="w-4 h-4 text-slate-600" />
   </div>
 </div>
+
 
         {/* Header */}
         <div className="p-6 border-b border-slate-200/60 ">

@@ -18,11 +18,77 @@ import { useToast } from '@/hooks/use-toast';
 import { useHttpAuth } from '@/hooks/useHttpAuth';
 import { Calendar, DollarSign, FileText, Users, Building, TrendingUp, BarChart3, Calculator, RefreshCw, Lock, ExternalLink, CheckCircle, Clock, AlertCircle } from 'lucide-react';
 
+
+ 
+
+// Add type definitions for API responses
+interface QuickBooksStatus {
+  connected: boolean;
+  lastSync?: string;
+}
+
+interface SalesMetrics {
+  totalRevenue?: number;
+  revenueGrowth?: number;
+  outstanding?: number;
+  overdueCount?: number;
+  activeCustomers?: number;
+  newCustomers?: number;
+  conversionRate?: number;
+}
+
+interface Account {
+  id: string;
+  name: string;
+  type: string;
+  subtype: string;
+  balance: number;
+  description?: string;
+  active?: boolean;
+}
+
+interface Transaction {
+  id: string;
+  type: string;
+  date: string;
+  amount: number;
+  description: string;
+  reference?: string;
+  status: string;
+}
+
+interface Customer {
+  id: string;
+  name: string;
+  companyName?: string;
+  email?: string;
+  balance: number;
+  active?: boolean;
+}
+
+interface Vendor {
+  id: string;
+  name: string;
+  companyName?: string;
+  email?: string;
+  balance: number;
+  active?: boolean;
+}
+
+interface Report {
+  id: string;
+  name: string;
+  type: string;
+  generatedBy: string;
+  generatedAt: string;
+  data?: any;
+}
+
 // Form schemas
 const accountSchema = z.object({
   name: z.string().min(1, 'Account name is required'),
-  accountType: z.enum(['asset', 'liability', 'equity', 'income', 'expense']),
-  accountSubType: z.string().min(1, 'Account sub-type is required'),
+  type: z.enum(['ASSET', 'LIABILITY', 'EQUITY', 'INCOME', 'EXPENSE']),
+  subtype: z.string().min(1, 'Account sub-type is required'),
   description: z.string().optional(),
   balance: z.number().min(0),
 });
@@ -74,6 +140,10 @@ export default function Accounting() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user } = useHttpAuth();
+
+
+  
 
   // Check accounting access
   const { data: accessCheck, isLoading: accessLoading, error: accessError } = useQuery({
@@ -85,34 +155,34 @@ export default function Accounting() {
   console.log('Access check result:', { accessCheck, accessLoading, accessError });
 
   // Fallback for network issues - if user has accounting permissions, allow access
-  const { user } = useHttpAuth();
   const hasAccountingPermission = user?.permissions?.accounting === true;
   
   // If query failed but user has accounting permissions, allow access
   const effectiveAccessCheck = accessCheck || (hasAccountingPermission && !accessLoading ? { hasAccess: true, user: user?.username || 'authenticated_user' } : null);
 
+  
   // Data queries
-  const { data: accounts = [], isLoading: accountsLoading } = useQuery({
+  const { data: accounts = [], isLoading: accountsLoading } = useQuery<Account[]>({
     queryKey: ['/api/accounting/accounts'],
     enabled: (effectiveAccessCheck as any)?.hasAccess,
   });
 
-  const { data: transactions = [], isLoading: transactionsLoading } = useQuery({
+   const { data: transactions = [], isLoading: transactionsLoading } = useQuery<Transaction[]>({
     queryKey: ['/api/accounting/transactions'],
     enabled: (effectiveAccessCheck as any)?.hasAccess,
   });
 
-  const { data: customers = [], isLoading: customersLoading } = useQuery({
+    const { data: customers = [], isLoading: customersLoading } = useQuery<Customer[]>({
     queryKey: ['/api/accounting/customers'],
     enabled: (effectiveAccessCheck as any)?.hasAccess,
   });
 
-  const { data: vendors = [], isLoading: vendorsLoading } = useQuery({
+  const { data: vendors = [], isLoading: vendorsLoading } = useQuery<Vendor[]>({
     queryKey: ['/api/accounting/vendors'],
     enabled: (effectiveAccessCheck as any)?.hasAccess,
   });
 
-  const { data: reports = [], isLoading: reportsLoading } = useQuery({
+  const { data: reports = [], isLoading: reportsLoading } = useQuery<Report[]>({
     queryKey: ['/api/accounting/reports'],
     enabled: (effectiveAccessCheck as any)?.hasAccess,
   });
@@ -128,17 +198,17 @@ export default function Accounting() {
     retry: false,
   });
 
-  const { data: salesOrders = [], isLoading: isLoadingOrders } = useQuery({
-    queryKey: ['/api/sales-orders'],
-    retry: false,
-  });
+  // const { data: salesOrders = [], isLoading: isLoadingOrders } = useQuery({
+  //   queryKey: ['/api/sales-orders'],
+  //   retry: false,
+  // });
 
-  const { data: salesMetrics } = useQuery({
+  const { data: salesMetrics } = useQuery<SalesMetrics>({
     queryKey: ['/api/sales/metrics'],
     retry: false,
   });
 
-  const { data: qbStatus } = useQuery({
+   const { data: qbStatus } = useQuery<QuickBooksStatus>({
     queryKey: ['/api/quickbooks/status'],
     retry: false,
   });
@@ -170,15 +240,45 @@ export default function Accounting() {
   });
 
   const createAccountMutation = useMutation({
-    mutationFn: (data: any) => apiRequest('/api/accounting/accounts', 'POST', JSON.stringify(data)),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/accounting/accounts'] });
+    mutationFn: async (data: z.infer<typeof accountSchema>) => {
+     
+      const accountData = {
+        ...data,
+        createdById: user?.id || 'current-user',
+      };
+      
+      const response = await fetch('https://lively-enjoyment-testing.up.railway.app/api/accounting/accounts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(accountData),
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to create account');
+      }
+      
+      return response.json();
+    },
+    onSuccess: (data) => {
       toast({ title: 'Success', description: 'Account created successfully' });
+      console.log('Created account:', data);
+      // Reset the form
+      accountForm.reset();
+      // Invalidate and refetch accounts
+      queryClient.invalidateQueries({ queryKey: ['/api/accounting/accounts'] });
     },
     onError: (error: any) => {
       toast({ title: 'Error', description: error.message || 'Failed to create account', variant: 'destructive' });
+      console.error('Account creation error:', error);
     },
   });
+
+
+
+  
 
   const createTransactionMutation = useMutation({
     mutationFn: (data: any) => apiRequest('/api/accounting/transactions', 'POST', JSON.stringify(data)),
@@ -351,8 +451,8 @@ export default function Accounting() {
     resolver: zodResolver(accountSchema),
     defaultValues: {
       name: '',
-      accountType: 'asset',
-      accountSubType: '',
+      type: 'ASSET',
+      subtype: '',
       description: '',
       balance: 0,
     },
@@ -445,11 +545,11 @@ export default function Accounting() {
   }
 
   // Calculate dashboard metrics
-  const accountsArr = accounts as any[] || [];
-  const totalAssets = accountsArr.filter((acc: any) => acc.accountType === 'asset').reduce((sum: number, acc: any) => sum + acc.balance, 0);
-  const totalLiabilities = accountsArr.filter((acc: any) => acc.accountType === 'liability').reduce((sum: number, acc: any) => sum + acc.balance, 0);
-  const totalIncome = accountsArr.filter((acc: any) => acc.accountType === 'income').reduce((sum: number, acc: any) => sum + acc.balance, 0);
-  const totalExpenses = accountsArr.filter((acc: any) => acc.accountType === 'expense').reduce((sum: number, acc: any) => sum + acc.balance, 0);
+  const accountsArr = accounts as Account[] || [];
+  const totalAssets = accountsArr.filter((acc: Account) => acc.type === 'ASSET').reduce((sum: number, acc: Account) => sum + acc.balance, 0);
+  const totalLiabilities = accountsArr.filter((acc: Account) => acc.type === 'LIABILITY').reduce((sum: number, acc: Account) => sum + acc.balance, 0);
+  const totalIncome = accountsArr.filter((acc: Account) => acc.type === 'INCOME').reduce((sum: number, acc: Account) => sum + acc.balance, 0);
+  const totalExpenses = accountsArr.filter((acc: Account) => acc.type === 'EXPENSE').reduce((sum: number, acc: Account) => sum + acc.balance, 0);
   const netIncome = totalIncome - totalExpenses;
 
   return (
@@ -523,7 +623,7 @@ export default function Accounting() {
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{(customers as any[] || []).length}</div>
+                 <div className="text-2xl font-bold">{(customers as Customer[] || []).length}</div>
               </CardContent>
             </Card>
           </div>
@@ -535,13 +635,13 @@ export default function Accounting() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  {(transactions as any[] || []).slice(0, 5).map((transaction: any) => (
+                   {(transactions as Transaction[] || []).slice(0, 5).map((transaction: Transaction) => (
                     <div key={transaction.id} className="flex items-center justify-between">
                       <div>
                         <p className="font-medium">{transaction.description}</p>
                         <p className="text-sm text-muted-foreground">{transaction.date}</p>
                       </div>
-                      <Badge variant={transaction.type === 'income' ? 'default' : 'secondary'}>
+                      <Badge variant={transaction.type === 'INCOME' ? 'default' : 'secondary'}>
                         ${transaction.amount.toLocaleString()}
                       </Badge>
                     </div>
@@ -556,7 +656,7 @@ export default function Accounting() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  {(reports as any[] || []).slice(0, 5).map((report: any) => (
+                    {(reports as Report[] || []).slice(0, 5).map((report: Report) => (
                     <div key={report.id} className="flex items-center justify-between">
                       <div>
                         <p className="font-medium">{report.name}</p>
@@ -754,6 +854,33 @@ export default function Accounting() {
           <div className="flex justify-between items-center">
             <h2 className="text-3xl font-bold text-slate-900 dark:text-white">Chart of Accounts</h2>
             <div className="flex gap-3">
+              <Button 
+                onClick={() => {
+                  console.log('Testing API connection...');
+                  fetch('https://lively-enjoyment-testing.up.railway.app/api/accounting/accounts', {
+                    method: 'GET',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                  })
+                  .then(response => {
+                    console.log('API test response status:', response.status);
+                    return response.json();
+                  })
+                  .then(data => {
+                    console.log('API test response data:', data);
+                    toast({ title: 'API Test', description: 'API connection successful' });
+                  })
+                  .catch(error => {
+                    console.error('API test error:', error);
+                    toast({ title: 'API Test', description: 'API connection failed', variant: 'destructive' });
+                  });
+                }}
+                variant="outline"
+                className="shadow-sm"
+              >
+                Test API
+              </Button>
               <Dialog>
                 <DialogTrigger asChild>
                   <Button variant="outline" className="shadow-sm">
@@ -816,7 +943,7 @@ export default function Accounting() {
                     />
                     <FormField
                       control={accountForm.control}
-                      name="accountType"
+                      name="type"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Account Type</FormLabel>
@@ -827,11 +954,11 @@ export default function Accounting() {
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="asset">Asset</SelectItem>
-                              <SelectItem value="liability">Liability</SelectItem>
-                              <SelectItem value="equity">Equity</SelectItem>
-                              <SelectItem value="income">Income</SelectItem>
-                              <SelectItem value="expense">Expense</SelectItem>
+                               <SelectItem value="ASSET">Asset</SelectItem>
+                              <SelectItem value="LIABILITY">Liability</SelectItem>
+                              <SelectItem value="EQUITY">Equity</SelectItem>
+                              <SelectItem value="INCOME">Income</SelectItem>
+                              <SelectItem value="EXPENSE">Expense</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -840,7 +967,7 @@ export default function Accounting() {
                     />
                     <FormField
                       control={accountForm.control}
-                      name="accountSubType"
+                      name="subtype"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Account Sub-Type</FormLabel>
@@ -899,13 +1026,13 @@ export default function Accounting() {
                 <p className="text-slate-600 dark:text-slate-300">Loading accounts...</p>
               </div>
             ) : (
-              (accounts || []).map((account: any) => (
+               (accounts || []).map((account: Account) => (
                 <Card key={account.id} className="shadow-sm hover:shadow-md transition-shadow">
                   <CardContent className="flex items-center justify-between p-6">
                     <div className="flex-1">
                       <h3 className="text-lg font-semibold text-slate-900 dark:text-white">{account.name}</h3>
                       <p className="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                        {account.accountType} - {account.accountSubType}
+                        {account.type} - {account.subtype}
                       </p>
                       {account.description && (
                         <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">{account.description}</p>
@@ -1023,9 +1150,9 @@ export default function Accounting() {
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              {(accounts || []).map((account: any) => (
+                              {(accounts || []).map((account: Account) => (
                                 <SelectItem key={account.id} value={account.id}>
-                                  {account.name} ({account.accountType})
+                                  {account.name} ({account.type})
                                 </SelectItem>
                               ))}
                             </SelectContent>
@@ -1073,7 +1200,7 @@ export default function Accounting() {
             {transactionsLoading ? (
               <p>Loading transactions...</p>
             ) : (
-              (transactions || []).map((transaction: any) => (
+               (transactions || []).map((transaction: Transaction) => (
                 <Card key={transaction.id}>
                   <CardContent className="flex items-center justify-between p-4">
                     <div>
@@ -1245,7 +1372,7 @@ export default function Accounting() {
             {customersLoading ? (
               <p>Loading customers...</p>
             ) : (
-              (customers || []).map((customer: any) => (
+              (customers || []).map((customer: Customer) => (
                 <Card key={customer.id}>
                   <CardContent className="flex items-center justify-between p-4">
                     <div>
@@ -1430,7 +1557,7 @@ export default function Accounting() {
             {vendorsLoading ? (
               <p>Loading vendors...</p>
             ) : (
-              (vendors || []).map((vendor: any) => (
+                (vendors || []).map((vendor: Vendor) => (
                 <Card key={vendor.id}>
                   <CardContent className="flex items-center justify-between p-4">
                     <div>
@@ -1571,7 +1698,7 @@ export default function Accounting() {
                 </CardContent>
               </Card>
             ) : (
-              (reports || []).map((report: any) => (
+              (reports || []).map((report: Report) => (
                 <Card key={report.id}>
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-4">

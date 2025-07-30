@@ -1,19 +1,19 @@
 import { useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
+// import { Separator } from "@/components/ui/separator";
+// import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { apiRequest } from "@/lib/queryClient";
+// import { apiRequest } from "@/lib/queryClient";
 import { 
   Settings as SettingsIcon, 
-  User, 
-  Globe, 
-  Database, 
-  Palette, 
+  // User, 
+  // Globe, 
+  // Database, 
+  // Palette, 
   Users,
   CheckCircle,
   XCircle,

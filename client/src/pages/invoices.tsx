@@ -13,11 +13,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { apiRequest } from '@/lib/queryClient';
+// import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
-import { FileText, Plus, Eye, Edit, Send, DollarSign, Clock, CheckCircle, XCircle, Calculator, Users, TrendingUp, X } from 'lucide-react';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { FileText, Plus, Eye, Edit, Send, DollarSign, Clock, TrendingUp, X } from 'lucide-react';
+// import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+// import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 // Form schemas
 const lineItemSchema = z.object({
@@ -54,7 +54,7 @@ const invoiceSchema = z.object({
 
 export default function Invoices() {
   const [activeTab, setActiveTab] = useState('overview');
-  const [editingItem, setEditingItem] = useState(null);
+  // const [editingItem, setEditingItem] = useState(null);
   const [lineItems, setLineItems] = useState([{ sku: '', description: '', quantity: 1, unitPrice: 0, taxRate: 0.08 }]);
   const [showInvoiceForm, setShowInvoiceForm] = useState(false);
   const [clientSearchTerm, setClientSearchTerm] = useState('');
@@ -99,11 +99,11 @@ export default function Invoices() {
   });
   const invoicesArr = invoices as any[];
 
-  const { data: projects = [], isLoading: projectsLoading } = useQuery<any[]>({
-    queryKey: ['/api/proxy/projects'],
-    queryFn: () => fetch('/api/proxy/projects', { credentials: 'include' }).then(res => res.json()),
-  });
-  const projectsArr = projects as any[];
+  // const { data: projects = [], isLoading: projectsLoading } = useQuery<any[]>({
+  //   queryKey: ['/api/proxy/projects'],
+  //   queryFn: () => fetch('/api/proxy/projects', { credentials: 'include' }).then(res => res.json()),
+  // });
+  // const projectsArr = projects as any[];
 
   // Client data loading function (copied from projects page)
   const fetchClients = async () => {
