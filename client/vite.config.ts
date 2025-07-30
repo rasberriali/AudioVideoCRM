@@ -15,7 +15,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:8888',
+        target: 'https://lively-enjoyment-testing.up.railway.app',
         changeOrigin: true,
         secure: false,
       }
