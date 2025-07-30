@@ -3,7 +3,7 @@ import { Sidebar } from '../pages/Sidebar';
 import { StatusBar } from '../pages/StatusBar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-// import { useHttpAuth } from '@/hooks/useHttpAuth';
+import { useHttpAuth } from '@/hooks/useHttpAuth';
 import { LogOut, Search, Bell, Clock, Settings } from 'lucide-react';
 
 interface CrmLayoutProps {
@@ -11,7 +11,7 @@ interface CrmLayoutProps {
 }
 
 export function CrmLayout({ children }: CrmLayoutProps) {
-  // const { user, logout } = useHttpAuth();
+  const { user, logout } = useHttpAuth();
 
   return (
     <div className="h-screen flex flex-col bg-gradient-to-br from-slate-50 via-white to-slate-100 overflow-hidden">
@@ -24,16 +24,16 @@ export function CrmLayout({ children }: CrmLayoutProps) {
           <div className="flex items-center space-x-4">
             <div className="relative">
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold text-sm shadow-lg">
-                {/* {user?.firstName?.charAt(0)}{user?.lastName?.charAt(0)} */}
+                {user?.firstName?.charAt(0)}{user?.lastName?.charAt(0)}
               </div>
               <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-400 border-2 border-white rounded-full"></div>
             </div>
             <div>
-              <p className="text-sm font-semibold text-slate-800">
-                {/* {user?.firstName} {user?.lastName} */}
+              <p className="text-sm font-semibold text-slate-800 hidden md:flex w-64 ">
+                {user?.firstName} {user?.lastName}
               </p>
-              <p className="text-xs text-slate-500 font-medium">
-                {/* {user?.department} • {user?.role?.replace('_', ' ')} */}
+              <p className="text-xs text-slate-500 font-medium hidden md:flex w-64">
+                {user?.department} • {user?.role?.replace('_', ' ')}
               </p>
             </div>
           </div>
@@ -76,7 +76,7 @@ export function CrmLayout({ children }: CrmLayoutProps) {
             <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
           </Button>
           <Button 
-            // onClick={logout}
+            onClick={logout}
             className="flex items-center space-x-2 px-4 py-2 h-9 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-medium rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
           >
             <LogOut className="h-4 w-4" />

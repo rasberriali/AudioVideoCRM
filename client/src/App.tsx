@@ -1,7 +1,7 @@
 import { Route, Switch } from "wouter";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { CrmLayout } from "./layout/mainCRMLayout";
-import Dashboard from "./pages/dashboard";
+import Dashboard from "./components/Dashboard/dashboard";
 import Projects from "./pages/projects"
 import TasksPage from "./pages/tasks"
 import { queryClient } from "./lib/queryClient";
@@ -19,6 +19,8 @@ import AdministrationPage from "./pages/administration-page-simple"
 import HttpFilesPage from "./pages/files"
 import Suppliers from "./pages/suppliers"
 
+
+// import { NotificationSocket } from "./components/NotificationSocket";
 import HttpLogin from "@/pages/http-login";
 import CustomLogin from "./pages/custom-login";
 import { SoundWaveLoader } from "./components/SoundWaveLoader";
@@ -66,6 +68,7 @@ const httpAuth = useHttpAuth();
 
   return (
     <QueryClientProvider client={queryClient}>
+       {/* <NotificationSocket /> */}
       <CrmLayout>
         <Switch>
           <Route path="/" component={Dashboard} />

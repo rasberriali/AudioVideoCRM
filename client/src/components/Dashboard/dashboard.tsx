@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { TaskDashboard } from "../components/task-dashboard"
+import { TaskDashboard } from "../task-dashboard"
 import { 
   BarChart3, 
   TrendingUp, 
@@ -17,7 +17,8 @@ import {
   ListTodo,
   User,
   Bell,
-  BellRing
+  BellRing,
+ 
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { useHttpAuth } from '@/hooks/useHttpAuth';
@@ -33,11 +34,11 @@ export default function Dashboard() {
   });
 
   // // Fetch notifications for the current user
-  // const { data: notifications = [], isLoading: notificationsLoading } = useQuery({
-  //   queryKey: [`/api/notifications/${user?.id}`],
-  //   enabled: false, // Disable until external server has this endpoint
-  //   refetchInterval: false,
-  // });
+  const { data: notifications = [], isLoading: notificationsLoading } = useQuery({
+    queryKey: [`/api/notifications/${user?.id}`],
+    enabled: false, // Disable until external server has this endpoint
+    refetchInterval: false,
+  });
 
   // Mock data for demonstration
   const stats = {
@@ -98,54 +99,84 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="flex-1 flex flex-col overflow-hidden bg-slate-50">
+    <div className="flex-1 flex flex-col overflow-hidden bg-slate-50  ">
       {/* Header */}
-      <div className="bg-white border-b border-slate-300 p-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-slate-900 flex items-center">
-              <BarChart3 className="mr-3 text-blue-600" size={28} />
-              Dashboard
-            </h1>
-            <p className="text-slate-600 mt-1">Overview of your business metrics and activities</p>
-          </div>
-          <div className="flex items-center space-x-4">
-            {/* Notification System */}
-            {/* {isAuthenticated && (
-              <div className="relative">
-                <button className="relative p-2 text-neutral-600 hover:text-neutral-900 transition-colors">
-                  {notifications && notifications.length > 0 ? (
-                    <BellRing className="h-5 w-5" />
-                  ) : (
-                    <Bell className="h-5 w-5" />
-                  )}
-                  {notifications && notifications.length > 0 && (
-                    <span className="absolute -top-1 -right-1 h-3 w-3 bg-red-500 rounded-full flex items-center justify-center text-xs text-white">
-                      {notifications.length > 9 ? '9+' : notifications.length}
-                    </span>
-                  )}
-                </button>
-              </div>
-            )} */}
-            {/* User Info */}
-            {isAuthenticated && user && (
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-semibold">
-                  {user.firstName?.[0]}{user.lastName?.[0]}
-                </div>
-                <span className="text-sm text-slate-600">
-                  {user.firstName} {user.lastName}
-                </span>
-              </div>
-            )}
-            <div className="text-sm text-slate-500">
-              Last updated: {new Date().toLocaleString()}
-            </div>
-          </div>
-        </div>
+     <div className="bg-white border-b border-slate-300 p-4">
+  <div className="flex flex-col md:flex-row md:items-center justify-between md:ml-0 ml-10 md:px-10 px-16 w-full">
+    
+    {/* Left side: Dashboard title and subtitle */}
+    <div className="w-full flex justify-between items-start md:block">
+      <div>
+        <h1 className="text-2xl font-bold text-slate-900 flex items-center">
+          <BarChart3 className="mr-3 text-blue-600" size={28} />
+          Dashboard
+        </h1>
+        <p className="text-slate-600 mt-1 md:text-base text-sm">
+          Overview of your business metrics and activities
+        </p>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-6">
+      {/* Bell icon for small screens */}
+      <div className="md:hidden block">
+        {isAuthenticated && (
+          <div className="relative">
+            <button className="relative p-2 text-neutral-600 hover:text-neutral-900 transition-colors">
+              {notifications && notifications.length > 0 ? (
+                <BellRing className="h-5 w-5" />
+              ) : (
+                <Bell className="h-5 w-5" />
+              )}
+              {notifications && notifications.length > 0 && (
+                <span className="absolute -top-1 -right-1 h-3 w-3 bg-red-500 rounded-full flex items-center justify-center text-xs text-white">
+                  {notifications.length > 9 ? '9+' : notifications.length}
+                </span>
+              )}
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+
+    {/* Right side: Bell (md+), User Info, Last Updated */}
+    <div className="flex items-center space-x-4 md:mt-0 mt-4 ">
+      <div className="hidden md:block">
+        {isAuthenticated && (
+          <div className="relative">
+            <button className="relative p-2 text-neutral-600 hover:text-neutral-900 transition-colors">
+              {notifications && notifications.length > 0 ? (
+                <BellRing className="h-5 w-5" />
+              ) : (
+                <Bell className="h-5 w-5" />
+              )}
+              {notifications && notifications.length > 0 && (
+                <span className="absolute -top-1 -right-1 h-3 w-3 bg-red-500 rounded-full flex items-center justify-center text-xs text-white">
+                  {notifications.length > 9 ? '9+' : notifications.length}
+                </span>
+              )}
+            </button>
+          </div>
+        )}
+      </div>
+
+      {isAuthenticated && user && (
+        <div className=" items-center space-x-2 md:flex hidden flex-row justify-between ">
+          <div className="w-11 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-semibold">
+            {user.firstName?.[0]}{user.lastName?.[0]}
+          </div>
+          <span className="text-sm text-slate-600 ">
+            {user.firstName} {user.lastName}
+          </span>
+        </div>
+      )}
+      
+      <div className="text-sm text-slate-500 md:flex hidden">
+        Last updated: {new Date().toLocaleString()}
+      </div>
+    </div>
+  </div>
+</div>
+
+      <div className="flex-1 overflow-y-auto py-6 xl:px-12 px-8 md:ml-0 ml-22 ">
         {/* Key Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
           <Card>
