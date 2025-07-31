@@ -247,7 +247,7 @@ export default function Accounting() {
         createdById: user?.id || 'current-user',
       };
       
-      const response = await fetch('https://lively-enjoyment-testing.up.railway.app/api/accounting/accounts', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/accounting/accounts`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -857,7 +857,7 @@ export default function Accounting() {
               <Button 
                 onClick={() => {
                   console.log('Testing API connection...');
-                  fetch('https://lively-enjoyment-testing.up.railway.app/api/accounting/accounts', {
+                  fetch(`${import.meta.env.VITE_API_BASE_URL}/api/accounting/accounts`, {
                     method: 'GET',
                     headers: {
                       'Content-Type': 'application/json',
