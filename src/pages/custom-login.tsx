@@ -23,7 +23,7 @@ export default function CustomLogin() {
 
   const loginMutation = useMutation({
     mutationFn: async ({ username, password }: { username: string; password: string }) => {
-      const response = await fetch('/api/auth/custom-login', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/custom-login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

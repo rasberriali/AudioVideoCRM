@@ -55,7 +55,7 @@ export function useHttpAuth() {
       const requestBody = { username, password };
       console.log('Sending request:', requestBody);
       
-      const response = await fetch('/api/auth/custom-login', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/custom-login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
