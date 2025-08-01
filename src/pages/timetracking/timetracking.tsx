@@ -5,8 +5,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Input } from "../components/ui/input";
-import { Label } from '../components/ui/label';
+// import { Input } from "../../components/ui/input";
+// import { Label } from '../components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { 
   Clock, 
@@ -23,12 +23,12 @@ import {
   UserCheck
 } from 'lucide-react';
 import { format } from 'date-fns';
-import { apiRequest } from '../lib/queryClient';
+import { apiRequest } from '../../lib/queryClient';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import type { TimeEntry, Project, BreakEntry } from '../../shared/schema';
+import type { TimeEntry, Project, BreakEntry } from '../../../shared/schema';
 
 const clockInSchema = z.object({
   projectId: z.string().optional(),

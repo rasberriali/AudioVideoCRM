@@ -5,6 +5,7 @@ import { useToast } from '@/hooks/use-toast';
 interface NotificationData {
   type: string;
   data: any;
+  message:any;
 }
 
 export function NotificationSocket() {

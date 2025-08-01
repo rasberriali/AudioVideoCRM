@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+// import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { TaskDashboard } from "../components/task-dashboard"
+import { TaskDashboard } from "../../components/task-dashboard"
 import { 
   BarChart3, 
   TrendingUp, 
@@ -9,36 +9,40 @@ import {
   DollarSign, 
   Clock, 
   FolderOpen,
-  CheckCircle,
-  AlertTriangle,
+  // CheckCircle,
+  // AlertTriangle,
   Calendar,
   ArrowUp,
   ArrowDown,
   ListTodo,
-  User,
-  Bell,
-  BellRing,
+  // User,
+  // Bell,
+  // BellRing,
  
 } from 'lucide-react';
-import { useQuery } from '@tanstack/react-query';
+// import { useQuery } from '@tanstack/react-query';
 import { useHttpAuth } from '@/hooks/useHttpAuth';
 
 export default function Dashboard() {
   const { user, isAuthenticated } = useHttpAuth();
   
-  // Fetch tasks assigned to the current user
-  const { data: taskData = [], isLoading: tasksLoading, error: tasksError } = useQuery({
-    queryKey: ['/api/my-tasks'],
-    enabled: false, // Disable until external server has this endpoint
-    refetchInterval: false,
-  });
 
-  // // Fetch notifications for the current user
-  const { data: notifications = [], isLoading: notificationsLoading } = useQuery({
-    queryKey: [`/api/notifications/${user?.id}`],
-    enabled: false, // Disable until external server has this endpoint
-    refetchInterval: false,
-  });
+  //Just comment out these things since there's a need setup again and and create seperate folder for the api functions in /components/api/dashboard.ts
+  
+
+  // // Fetch tasks assigned to the current user
+  // const { data: taskData = [], isLoading: tasksLoading, error: tasksError } = useQuery({
+  //   queryKey: ['/api/my-tasks'],
+  //   enabled: false, // Disable until external server has this endpoint
+  //   refetchInterval: false,
+  // });
+
+  // // // Fetch notifications for the current user
+  // const { data: notifications = [], isLoading: notificationsLoading } = useQuery({
+  //   queryKey: [`/api/notifications/${user?.id}`],
+  //   enabled: false, // Disable until external server has this endpoint
+  //   refetchInterval: false,
+  // });
 
   // Mock data for demonstration
   const stats = {
@@ -54,41 +58,41 @@ export default function Dashboard() {
     utilization: 90
   };
 
-  // Filter tasks for current user and get upcoming ones
-  const userTasksFiltered = taskData ? (Array.isArray(taskData) ? taskData.filter((task: any) => 
-    task.assignedTo === user?.id && 
-    task.status !== 'completed' && 
-    task.status !== 'cancelled'
-  ).sort((a: any, b: any) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()) : []) : [];
+  // // Filter tasks for current user and get upcoming ones
+  // const userTasksFiltered = taskData ? (Array.isArray(taskData) ? taskData.filter((task: any) => 
+  //   task.assignedTo === user?.id && 
+  //   task.status !== 'completed' && 
+  //   task.status !== 'cancelled'
+  // ).sort((a: any, b: any) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()) : []) : [];
 
-  const dashboardTasks = userTasksFiltered.slice(0, 5); // Show first 5 upcoming tasks
+  // const dashboardTasks = userTasksFiltered.slice(0, 5); // Show first 5 upcoming tasks
 
-  // Calculate upcoming deadlines from actual tasks
-  const upcomingDeadlines = userTasksFiltered
-    .filter((task: any) => task.dueDate)
-    .map((task: any) => {
-      const dueDate = new Date(task.dueDate);
-      const today = new Date();
-      const timeDiff = dueDate.getTime() - today.getTime();
-      const daysLeft = Math.ceil(timeDiff / (1000 * 3600 * 24));
+  // // Calculate upcoming deadlines from actual tasks
+  // const upcomingDeadlines = userTasksFiltered
+  //   .filter((task: any) => task.dueDate)
+  //   .map((task: any) => {
+  //     const dueDate = new Date(task.dueDate);
+  //     const today = new Date();
+  //     const timeDiff = dueDate.getTime() - today.getTime();
+  //     const daysLeft = Math.ceil(timeDiff / (1000 * 3600 * 24));
       
-      return {
-        project: task.title,
-        client: task.projectName || 'N/A',
-        dueDate: task.dueDate,
-        daysLeft: daysLeft
-      };
-    })
-    .slice(0, 3); // Show top 3 upcoming deadlines
+  //     return {
+  //       project: task.title,
+  //       client: task.projectName || 'N/A',
+  //       dueDate: task.dueDate,
+  //       daysLeft: daysLeft
+  //     };
+  //   })
+  //   .slice(0, 3); // Show top 3 upcoming deadlines
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'active': return 'bg-green-500 text-white';
-      case 'completed': return 'bg-blue-500 text-white';
-      case 'on_hold': return 'bg-yellow-500 text-white';
-      default: return 'bg-slate-500 text-white';
-    }
-  };
+  // const getStatusColor = (status: string) => {
+  //   switch (status) {
+  //     case 'active': return 'bg-green-500 text-white';
+  //     case 'completed': return 'bg-blue-500 text-white';
+  //     case 'on_hold': return 'bg-yellow-500 text-white';
+  //     default: return 'bg-slate-500 text-white';
+  //   }
+  // };
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -117,7 +121,7 @@ export default function Dashboard() {
       </div>
 
       {/* Bell icon for small screens */}
-      <div className="md:hidden block">
+      {/* <div className="md:hidden block">
         {isAuthenticated && (
           <div className="relative">
             <button className="relative p-2 text-neutral-600 hover:text-neutral-900 transition-colors">
@@ -134,12 +138,12 @@ export default function Dashboard() {
             </button>
           </div>
         )}
-      </div>
+      </div> */}
     </div>
 
     {/* Right side: Bell (md+), User Info, Last Updated */}
     <div className="flex items-center space-x-4 md:mt-0 mt-4 ">
-      <div className="hidden md:block">
+      {/* <div className="hidden md:block">
         {isAuthenticated && (
           <div className="relative">
             <button className="relative p-2 text-neutral-600 hover:text-neutral-900 transition-colors">
@@ -156,7 +160,7 @@ export default function Dashboard() {
             </button>
           </div>
         )}
-      </div>
+      </div> */}
 
       {isAuthenticated && user && (
         <div className=" items-center space-x-2 md:flex hidden flex-row justify-between ">
@@ -254,7 +258,7 @@ export default function Dashboard() {
               </CardTitle>
               <CardDescription>Tasks assigned to you</CardDescription>
             </CardHeader>
-            <CardContent>
+            {/* <CardContent>
               {tasksLoading ? (
                 <div className="space-y-4">
                   {[...Array(3)].map((_, i) => (
@@ -303,7 +307,7 @@ export default function Dashboard() {
                   })}
                 </div>
               )}
-            </CardContent>
+            </CardContent> */}
           </Card>
 
           {/* Upcoming Deadlines */}
@@ -316,7 +320,7 @@ export default function Dashboard() {
               <CardDescription>Projects requiring attention</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              {/* <div className="space-y-4">
                 {upcomingDeadlines.map((item, index) => (
                                   <div key={index} className="flex items-center justify-between p-3 border border-slate-200 rounded-lg">
                   <div className="flex-1">
@@ -332,7 +336,7 @@ export default function Dashboard() {
                     </div>
                   </div>
                 ))}
-              </div>
+              </div> */}
             </CardContent>
           </Card>
 
