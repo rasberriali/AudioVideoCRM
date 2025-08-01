@@ -37,7 +37,7 @@ import {
   Users, 
   UserPlus, 
   Shield, 
-  Settings,
+ // Settings,
   DollarSign,
   TrendingUp,
   Code,
@@ -187,7 +187,7 @@ export default function DepartmentsPage() {
   });
 
   const form = useForm<EmployeeFormData>({
-    resolver: zodResolver(employeeFormSchema),
+    //resolver: zodResolver(employeeFormSchema),
     defaultValues: {
       employeeId: "",
       firstName: "",

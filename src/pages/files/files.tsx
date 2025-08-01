@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation/*, useQueryClient */} from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -39,7 +39,7 @@ const AUTH_HEADER = 'Basic ' + btoa('aviuser:aviserver');
 
 export default function FilesPage() {
   const [currentPath, setCurrentPath] = useState('/');
-  const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
+  // const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
   const [showRenameDialog, setShowRenameDialog] = useState(false);
   const [showCreateFolderDialog, setShowCreateFolderDialog] = useState(false);
   const [renameTarget, setRenameTarget] = useState<FileItem | null>(null);
@@ -50,7 +50,7 @@ export default function FilesPage() {
   const wsRef = useRef<WebSocket | null>(null);
   
   const { toast } = useToast();
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
   // Fetch files from server
   const { data: filesData, isLoading, refetch } = useQuery({
@@ -193,7 +193,7 @@ export default function FilesPage() {
         title: 'Success',
         description: 'File deleted successfully'
       });
-      setSelectedFiles([]);
+      // setSelectedFiles([]);
       refetch();
     },
     onError: (error) => {
@@ -302,7 +302,7 @@ export default function FilesPage() {
 
   const handleNavigate = (path: string) => {
     setCurrentPath(path);
-    setSelectedFiles([]);
+    // setSelectedFiles([]);
   };
 
   const handleGoBack = () => {

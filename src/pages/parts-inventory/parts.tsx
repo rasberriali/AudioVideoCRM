@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+// import { zodResolver } from '@hookform/resolvers/zod';
 import { type ProjectPart, type Project } from '../../../shared/schema';
 import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
@@ -80,7 +80,7 @@ export default function PartsPage() {
   const isLoading = projectsLoading || neededPartsLoading || (selectedProject && partsLoading);
 
   const form = useForm<PartFormData>({
-    resolver: zodResolver(partFormSchema),
+    // resolver: zodResolver(partFormSchema),
     defaultValues: {
       partName: '',
       description: '',

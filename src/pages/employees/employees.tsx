@@ -6,13 +6,13 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+// import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+// import { zodResolver } from '@hookform/resolvers/zod';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
-import { Plus, User, Edit, Trash2, Eye, EyeOff, Mail, Phone, Calendar, DollarSign, Shield, Building2, Search, Filter, Key, MoreHorizontal } from 'lucide-react';
+import { Plus, User, Edit, Trash2,  Mail, Phone,/*Filter, Eye, EyeOff, */Calendar, DollarSign, Shield, Building2, Search, Key, MoreHorizontal } from 'lucide-react';
 import { useHttpAuth } from '@/hooks/useHttpAuth';
 
 interface Employee {
@@ -196,14 +196,14 @@ export default function EmployeesPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [departmentFilter, setDepartmentFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
-  const [showPasswords, setShowPasswords] = useState<{[key: string]: boolean}>({});
+  // const [showPasswords, setShowPasswords] = useState<{[key: string]: boolean}>({});
   const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
   const [passwordChangeEmployee, setPasswordChangeEmployee] = useState<Employee | null>(null);
   const [newPassword, setNewPassword] = useState('');
   const { toast } = useToast();
 
   const form = useForm<EmployeeFormData>({
-    resolver: zodResolver(employeeFormSchema),
+    // resolver: zodResolver(employeeFormSchema),
     defaultValues: {
       firstName: '',
       lastName: '',
@@ -479,13 +479,13 @@ export default function EmployeesPage() {
     setIsEmployeeDialogOpen(true);
   };
 
-  // Toggle password visibility
-  const togglePasswordVisibility = (employeeId: number | string) => {
-    setShowPasswords(prev => ({
-      ...prev,
-      [employeeId]: !prev[employeeId]
-    }));
-  };
+  // Toggle password visibility 
+  // const togglePasswordVisibility = (employeeId: number | string) => {
+  //   setShowPasswords(prev => ({
+  //     ...prev,
+  //     [employeeId]: !prev[employeeId]
+  //   }));
+  // };
 
   // Handle password change
   const handleChangePassword = (employee: Employee) => {
