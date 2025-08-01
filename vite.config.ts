@@ -13,6 +13,7 @@ export default defineConfig({
     }
   },
   server: {
+    port: 5174,
     proxy: {
       '/api': {
         target: 'https://lively-enjoyment-testing.up.railway.app',

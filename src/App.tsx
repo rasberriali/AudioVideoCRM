@@ -11,13 +11,13 @@ import Clients from "./pages/clients/clients"
 import Sales from "./pages/sales/sales"
 import Invoices from "./pages/invoices/invoices"
 import Accounting from "./pages/accounting/accounting";
-import Employees from "./pages/employees";
-import Departments from "./pages/departments";
-import Parts from "./pages/parts";
-import Settings from "./pages/settings";
+import Employees from "./pages/employees/employees";
+import Departments from "./pages/departments/departments";
+import Parts from "./pages/parts-inventory/parts";
+import Settings from "./pages/settings/settings";
 import AdministrationPage from "./pages/administration-page-simple"
-import HttpFilesPage from "./pages/files"
-import Suppliers from "./pages/suppliers"
+import HttpFilesPage from "./pages/files/files"
+import Suppliers from "./pages/suppliers/suppliers"
 
 
 // import { NotificationSocket } from "./components/NotificationSocket";
@@ -29,9 +29,16 @@ import { useHttpAuth } from "@/hooks/useHttpAuth";
 function App() {
 const httpAuth = useHttpAuth();
 
+
     // Use only HTTP authentication
-  const isAuthenticated = httpAuth.isAuthenticated;
-  const isLoading = httpAuth.isLoading;
+    /* TEMPORARY Bypass authentication for development
+    const isAuthenticated = httpAuth.isAuthenticated;
+    const isLoading = httpAuth.isLoading;
+   */
+  
+    // Bypass authentication for development
+  const isAuthenticated = true; // Always authenticated
+  const isLoading = false; // Not loading
   
 
   // Desktop App Logic - Show debug info at the top
@@ -71,7 +78,15 @@ const httpAuth = useHttpAuth();
        {/* <NotificationSocket /> */}
       <CrmLayout>
         <Switch>
-          <Route path="/" component={Dashboard} />
+        
+        {/* TEMPORARY bypass login */}
+        {/*<Route path="/" component={Dashboard} />*/}
+          <Route path="/">
+            {() => {
+              window.location.href = '/dashboard';
+              return null;
+            }}
+          </Route>
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/projects" component={Projects}/>
           <Route path="/tasks" component={TasksPage}/>
