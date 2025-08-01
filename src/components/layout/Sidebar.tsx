@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import { Button } from '@/components/ui/button';
 import {
   BarChart3,
@@ -21,26 +21,13 @@ import {
 } from 'lucide-react';
 import { Link, useLocation } from 'wouter';
 import { useHttpAuth } from '@/hooks/useHttpAuth';
-import toggle_btn from "../assets/toggle_btn.png";
 
 export function Sidebar() {
   const [location] = useLocation();
   const { user } = useHttpAuth();
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
-  const [isMobile, setIsMobile] = useState(false);
 
   const toggleSidebar = () => setIsSidebarVisible(!isSidebarVisible);
-
-  useEffect(() => {
-    const checkScreen = () => {
-      const mobile = window.innerWidth < 768;
-      setIsMobile(mobile);
-      if (mobile) setIsSidebarVisible(false); // auto-collapse on mobile
-    };
-    checkScreen();
-    window.addEventListener('resize', checkScreen);
-    return () => window.removeEventListener('resize', checkScreen);
-  }, []);
 
   const hasAdminAccess = user?.permissions?.admin === true;
 
@@ -95,28 +82,21 @@ export function Sidebar() {
   ];
 
   return (
-    <>
-
-
+    <div>
       {/* Sidebar */}
-      <aside
-  className={`
-    transition-all duration-300 
-    ${isSidebarVisible ? 'w-64' : 'w-24'}
-    bg-white/90 backdrop-blur-xl border-r border-slate-200/60 
-    h-full flex flex-col shadow-lg fixed md:relative z-40
-  `}
->
-  {/* Toggle Button (inside sidebar) */}
-  <div className="absolute top-8 -right-4 z-50">
-  <div
-    onClick={toggleSidebar}
-    className="cursor-pointer p-2 bg-white rounded-full shadow-md border hover:bg-slate-100 transition"
-  >
-    <PanelLeft className="w-4 h-4 text-slate-600" />
-  </div>
-</div>
+      <aside className={`transition-all duration-300 ${isSidebarVisible ? 'w-68' : 'w-26'}
+      bg-white/90 backdrop-blur-xl border-r border-slate-200/60 
+        h-full flex flex-col shadow-lg fixed md:relative z-40 `}>
 
+      {/* Toggle Button (inside sidebar) */}
+      <div className="absolute top-8 -right-4 z-50">
+        <div
+          onClick={toggleSidebar}
+          className="cursor-pointer p-2 bg-white rounded-full shadow-md border hover:bg-slate-100 transition"
+        >
+          <PanelLeft className="w-4 h-4 text-slate-600" />
+        </div>
+      </div>
 
         {/* Header */}
         <div className="p-6 border-b border-slate-200/60 ">
@@ -152,7 +132,7 @@ export function Sidebar() {
                     <Link key={item.path} href={item.path}>
                       <Button
                         variant="ghost"
-                        className={`w-full justify-start gap-4 h-11 px-3 rounded-xl transition-all duration-200
+                        className={` transition-all duration-300 ${isSidebarVisible ? 'w-full' : 'w-14'} justify-start h-11 flex rounded-xl transition-all duration-200
                           ${isActive
                             ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg'
                             : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-800'
@@ -172,14 +152,7 @@ export function Sidebar() {
             </div>
           ))}
         </nav>
-
-        {/* Footer */}
-        <div className="p-4 border-t border-neutral-300">
-          {isSidebarVisible && (
-            <div className="text-xs text-neutral-500">System Status: Online</div>
-          )}
-        </div>
       </aside>
-    </>
+    </div>
   );
 }

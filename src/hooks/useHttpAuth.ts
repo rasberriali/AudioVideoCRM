@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/hooks/use-toast'
 
-const HTTP_SERVER_URL = 'http://165.23.126.88:8888';
-const AUTH_HEADER = 'Basic ' + btoa('aviuser:aviserver');
+
+// Not really sure about this, not totally use for the current setup
+// const HTTP_SERVER_URL = 'http://165.23.126.88:8888';
+// const AUTH_HEADER = 'Basic ' + btoa('aviuser:aviserver');
 
 interface User {
   id: string;
@@ -10,6 +12,7 @@ interface User {
   firstName: string;
   lastName: string;
   department: string;
+  role?: string; 
   permissions: {
     accounting: boolean;
     projects: boolean;

@@ -1,7 +1,7 @@
 import { Route, Switch } from "wouter";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { CrmLayout } from "./layout/mainCRMLayout";
-import Dashboard from "./components/Dashboard/dashboard";
+import { CrmLayout } from "./components/layout/mainCRMLayout";
+import Dashboard from "./pages/dashboard";
 import Projects from "./pages/projects"
 import TasksPage from "./pages/tasks"
 import { queryClient } from "./lib/queryClient";

@@ -1,6 +1,10 @@
-import { TitleBar } from "../pages/TitleBar"
-import { Sidebar } from '../pages/Sidebar';
-import { StatusBar } from '../pages/StatusBar';
+
+// This mainCRMLayout Binds the upper header which has the user account logged,
+// navigation buttons as well as the sidebar which has all the routes for all the crm tabs.
+
+// import { TitleBar } from "./TitleBar"
+import { Sidebar } from './Sidebar';
+import { StatusBar } from './StatusBar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useHttpAuth } from '@/hooks/useHttpAuth';
@@ -15,7 +19,9 @@ export function CrmLayout({ children }: CrmLayoutProps) {
 
   return (
     <div className="h-screen flex flex-col bg-gradient-to-br from-slate-50 via-white to-slate-100 overflow-hidden">
-      <TitleBar />
+
+      {/* This is the idk title bar that says MyDrive Desktop */}
+      {/* <TitleBar /> */}
       
       {/* Modern Header with glassmorphism effect */}
       <div className="bg-white/80 backdrop-blur-xl border-b border-slate-200/50 px-6 py-4 flex items-center justify-between shadow-sm">
@@ -49,6 +55,8 @@ export function CrmLayout({ children }: CrmLayoutProps) {
         </div>
         
         {/* Enhanced Right side tools */}
+
+        {/* Clock Icon */}
         <div className="flex items-center space-x-2">
           <Button 
             variant="ghost" 
@@ -58,6 +66,8 @@ export function CrmLayout({ children }: CrmLayoutProps) {
           >
             <Clock className="h-4 w-4 text-slate-600" />
           </Button>
+
+          {/* Settings Icon */}
           <Button 
             variant="ghost" 
             size="sm" 
@@ -66,6 +76,8 @@ export function CrmLayout({ children }: CrmLayoutProps) {
           >
             <Settings className="h-4 w-4 text-slate-600" />
           </Button>
+
+          {/* Bell Icon */}
           <Button 
             variant="ghost" 
             size="sm" 
@@ -75,6 +87,8 @@ export function CrmLayout({ children }: CrmLayoutProps) {
             <Bell className="h-4 w-4 text-slate-600" />
             <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
           </Button>
+
+          {/* Logout Icon */}
           <Button 
             onClick={logout}
             className="flex items-center space-x-2 px-4 py-2 h-9 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-medium rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"

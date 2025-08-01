@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { TaskDashboard } from "../task-dashboard"
+import { TaskDashboard } from "../components/task-dashboard"
 import { 
   BarChart3, 
   TrendingUp, 
