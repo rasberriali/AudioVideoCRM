@@ -11,13 +11,13 @@ import Clients from "./pages/clients"
 import Sales from "./pages/sales"
 import Invoices from "./pages/invoices"
 import Accounting from "./pages/accounting";
-import Employees from "./pages/employees";
-import Departments from "./pages/departments";
-import Parts from "./pages/parts";
-import Settings from "./pages/settings";
+import Employees from "./pages/employees/employees";
+import Departments from "./pages/departments/departments";
+import Parts from "./pages/parts-inventory/parts";
+import Settings from "./pages/settings/settings";
 import AdministrationPage from "./pages/administration-page-simple"
-import HttpFilesPage from "./pages/files"
-import Suppliers from "./pages/suppliers"
+import HttpFilesPage from "./pages/files/files"
+import Suppliers from "./pages/suppliers/suppliers"
 
 
 // import { NotificationSocket } from "./components/NotificationSocket";
