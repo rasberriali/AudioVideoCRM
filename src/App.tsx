@@ -1,16 +1,16 @@
 import { Route, Switch } from "wouter";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { CrmLayout } from "./components/layout/mainCRMLayout";
-import Dashboard from "./pages/dashboard";
-import Projects from "./pages/projects"
-import TasksPage from "./pages/tasks"
+import Dashboard from "./pages/dashboard/dashboard";
+import Projects from "./pages/projects&workspaces/projects"
+import TasksPage from "./pages/tasks/tasks"
 import { queryClient } from "./lib/queryClient";
-import TimeTracking from "./pages/timetracking";
-import CalendarPage from "./pages/calendar"
-import Clients from "./pages/clients"
-import Sales from "./pages/sales"
-import Invoices from "./pages/invoices"
-import Accounting from "./pages/accounting";
+import TimeTracking from "./pages/timetracking/timetracking"
+import CalendarPage from "./pages/calendar/calendar"
+import Clients from "./pages/clients/clients"
+import Sales from "./pages/sales/sales"
+import Invoices from "./pages/invoices/invoices"
+import Accounting from "./pages/accounting/accounting";
 import Employees from "./pages/employees/employees";
 import Departments from "./pages/departments/departments";
 import Parts from "./pages/parts-inventory/parts";

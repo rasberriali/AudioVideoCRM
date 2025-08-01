@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation} from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -10,6 +10,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Plus, FileText, Edit, Archive, Upload, Download, Eye } from "lucide-react";
 import type { WorkspaceProject, WorkspaceCategory } from "../../shared/schema";
+
+
+
+interface project {
+  
+  customerName: string;
+
+}
+
 
 interface ProjectDetailModalProps {
   isOpen: boolean;
@@ -173,7 +182,7 @@ export function ProjectDetailModal({ isOpen, onClose, project, workspaceId, cate
                   <label className="text-sm font-medium text-slate-600">Description</label>
                   {isEditing ? (
                     <Textarea
-                      value={editedProject.description || project.description}
+                      value={editedProject.description ?? project.description ??''}
                       onChange={(e) => setEditedProject(prev => ({ ...prev, description: e.target.value }))}
                       className="mt-1"
                     />
@@ -258,7 +267,7 @@ export function ProjectDetailModal({ isOpen, onClose, project, workspaceId, cate
                   {isEditing ? (
                     <Input
                       type="number"
-                      value={editedProject.budget || project.budget}
+                      value={editedProject.budget ?? project.budget ?? undefined}
                       onChange={(e) => setEditedProject(prev => ({ ...prev, budget: parseFloat(e.target.value) }))}
                       className="mt-1"
                     />
@@ -272,7 +281,7 @@ export function ProjectDetailModal({ isOpen, onClose, project, workspaceId, cate
                   {isEditing ? (
                     <Input
                       type="number"
-                      value={editedProject.estimatedHours || project.estimatedHours}
+                      value={editedProject.estimatedHours ?? project.estimatedHours ?? ''}
                       onChange={(e) => setEditedProject(prev => ({ ...prev, estimatedHours: parseFloat(e.target.value) }))}
                       className="mt-1"
                     />
@@ -286,7 +295,7 @@ export function ProjectDetailModal({ isOpen, onClose, project, workspaceId, cate
                   {isEditing ? (
                     <Input
                       type="date"
-                      value={editedProject.startDate || project.startDate}
+                      value={editedProject.startDate ?? project.startDate ?? ''}
                       onChange={(e) => setEditedProject(prev => ({ ...prev, startDate: e.target.value }))}
                       className="mt-1"
                     />
@@ -302,7 +311,7 @@ export function ProjectDetailModal({ isOpen, onClose, project, workspaceId, cate
                   {isEditing ? (
                     <Input
                       type="date"
-                      value={editedProject.endDate || project.endDate}
+                      value={editedProject.endDate ?? project.endDate ?? ''}
                       onChange={(e) => setEditedProject(prev => ({ ...prev, endDate: e.target.value }))}
                       className="mt-1"
                     />

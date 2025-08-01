@@ -1,106 +1,112 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
-import { useWorkspaces } from "@/hooks/useLocalData";
+// import { apiRequest } from "@/lib/queryClient";
+// import { useWorkspaces } from "@/hooks/useLocalData";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
-import { SyncStatus } from "../components/SyncStatus"
+import { SyncStatus } from "../../components/SyncStatus"
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { Plus, FolderOpen, Users, Folder, CheckSquare, BarChart3, Upload, Clock, Archive, Trash2, Edit } from "lucide-react";
-import { WorkspaceView } from "../components/WorkspaceView";
-import { WorkspaceTemplates } from "../components/WorkspaceTemplates";
+import { Plus, FolderOpen, Users, CheckSquare, BarChart3, Upload, Clock, Archive, Trash2, Edit } from "lucide-react";
+// import { WorkspaceView } from "../components/WorkspaceView";
+import { WorkspaceTemplates } from "../../components/WorkspaceTemplates";
 // import { WorkspaceStatsCard } from "@/components/WorkspaceStatsCard";
 // import { BulkOperations } from "@/components/BulkOperations";
 // import { DragDropWorkspace } from "@/components/DragDropWorkspace";
 // import { FileUploadProgress } from "@/components/FileUploadProgress";
 // import { TimeTracker } from "@/components/TimeTracker";
 // import { ActivityFeed } from "@/components/ActivityFeed";
-import { WorkspaceColorCustomizer } from "../components/WorkspaceColorCustomizer";
+import { WorkspaceColorCustomizer } from "../../components/WorkspaceColorCustomizer";
 // import { AutoSaveManager } from "@/components/AutoSaveManager";
-import type { Workspace } from "../../shared/schema";
+import type { Workspace } from "../../../shared/schema";
 
 export default function ProjectsPage() {
   const [isWorkspaceModalOpen, setIsWorkspaceModalOpen] = useState(false);
-  const [isEditWorkspaceModalOpen, setIsEditWorkspaceModalOpen] = useState(false);
-  const [selectedWorkspace, setSelectedWorkspace] = useState<Workspace | null>(null);
-  const [editingWorkspace, setEditingWorkspace] = useState<Workspace | null>(null);
-  const [showWorkspaceView, setShowWorkspaceView] = useState(false);
+
+   const handleCreateFromTemplate = (template: WorkspaceTemplate, customName?: string) => {
+    // your logic, maybe call an API or update state
+    console.log("Creating workspace from:", template, "with name:", customName);
+  };
+
+  // const [isEditWorkspaceModalOpen, setIsEditWorkspaceModalOpen] = useState(false);
+  // const [selectedWorkspace, setSelectedWorkspace] = useState<Workspace | null>(null);
+  // const [editingWorkspace, setEditingWorkspace] = useState<Workspace | null>(null);
+  // const [showWorkspaceView, setShowWorkspaceView] = useState(false);
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
   // Define mutations for workspace operations
-  const deleteWorkspace = useMutation({
-    mutationFn: async (workspaceId: number) => {
-      const response = await apiRequest(`/api/workspaces/${workspaceId}`, "DELETE");
-      return response;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/workspaces'] });
-    }
-  });
+  // const deleteWorkspace = useMutation({
+  //   mutationFn: async (workspaceId: number) => {
+  //     const response = await apiRequest(`/api/workspaces/${workspaceId}`, "DELETE");
+  //     return response;
+  //   },
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries({ queryKey: ['/api/workspaces'] });
+  //   }
+  // });
 
-  const updateWorkspace = useMutation({
-    mutationFn: async (data: { id: number; name: string; description: string; color: string }) => {
-      const response = await apiRequest(`/api/workspaces/${data.id}`, "PUT", data);
-      return response.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/workspaces'] });
-    }
-  });
+  // const updateWorkspace = useMutation({
+  //   mutationFn: async (data: { id: number; name: string; description: string; color: string }) => {
+  //     const response = await apiRequest(`/api/workspaces/${data.id}`, "PUT", data);
+  //     return response.json();
+  //   },
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries({ queryKey: ['/api/workspaces'] });
+  //   }
+  // });
 
-  const createWorkspace = useMutation({
-    mutationFn: async (data: { name: string; description: string; color: string }) => {
-      const response = await apiRequest('/api/workspaces', "POST", data);
-      return response.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/workspaces'] });
-    }
-  });
+  // const createWorkspace = useMutation({
+  //   mutationFn: async (data: { name: string; description: string; color: string }) => {
+  //     const response = await apiRequest('/api/workspaces', "POST", data);
+  //     return response.json();
+  //   },
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries({ queryKey: ['/api/workspaces'] });
+  //   }
+  // });
 
   // Handle workspace deletion with local-first approach
-  const handleDeleteWorkspace = (workspaceId: string, workspaceName: string) => {
-    if (confirm(`Are you sure you want to delete "${workspaceName}"? This action cannot be undone.`)) {
-      deleteWorkspace.mutate(parseInt(workspaceId), {
-        onSuccess: () => {
-          toast({
-            title: "Workspace deleted",
-            description: `Workspace "${workspaceName}" has been deleted successfully.`,
-          });
-        },
-        onError: (error: any) => {
-          toast({
-            title: "Error deleting workspace",
-            description: "Failed to delete workspace. Please try again.",
-            variant: "destructive",
-          });
-        }
-      });
-    }
-  };
+  // const handleDeleteWorkspace = (workspaceId: string, workspaceName: string) => {
+  //   if (confirm(`Are you sure you want to delete "${workspaceName}"? This action cannot be undone.`)) {
+  //     deleteWorkspace.mutate(parseInt(workspaceId), {
+  //       onSuccess: () => {
+  //         toast({
+  //           title: "Workspace deleted",
+  //           description: `Workspace "${workspaceName}" has been deleted successfully.`,
+  //         });
+  //       },
+  //       onError: (error: any) => {
+  //         toast({
+  //           title: "Error deleting workspace",
+  //           description: "Failed to delete workspace. Please try again.",
+  //           variant: "destructive",
+  //         });
+  //       }
+  //     });
+  //   }
+  // };
 
   // Handle workspace editing with local-first approach
-  const handleEditWorkspace = (data: { id: number; name: string; description: string; color: string }) => {
-    updateWorkspace.mutate(data, {
-      onSuccess: () => {
-        setIsEditWorkspaceModalOpen(false);
-        setEditingWorkspace(null);
-        toast({
-          title: "Workspace updated",
-          description: `Workspace "${data.name}" has been updated successfully.`,
-        });
-      },
-      onError: (error: any) => {
-        toast({
-          title: "Error updating workspace",
-          description: "Failed to update workspace. Please try again.",
-          variant: "destructive",
-        });
-      }
-    });
-  };
+  // const handleEditWorkspace = (data: { id: number; name: string; description: string; color: string }) => {
+  //   updateWorkspace.mutate(data, {
+  //     onSuccess: () => {
+  //       setIsEditWorkspaceModalOpen(false);
+  //       setEditingWorkspace(null);
+  //       toast({
+  //         title: "Workspace updated",
+  //         description: `Workspace "${data.name}" has been updated successfully.`,
+  //       });
+  //     },
+  //     onError: (error: any) => {
+  //       toast({
+  //         title: "Error updating workspace",
+  //         description: "Failed to update workspace. Please try again.",
+  //         variant: "destructive",
+  //       });
+  //     }
+  //   });
+  // };
 
   // Handle workspace creation
   const handleWorkspaceCreated = (workspace: any) => {
@@ -124,28 +130,28 @@ export default function ProjectsPage() {
   });
   
   // Handle workspace creation from templates
-  const handleWorkspaceCreatedFromTemplate = (workspace: Workspace) => {
-    queryClient.invalidateQueries({ queryKey: ['/api/workspaces'] });
-    toast({
-      title: "Workspace created",
-      description: `Workspace "${workspace.name}" has been created successfully.`,
-    });
-  };
+  // const handleWorkspaceCreatedFromTemplate = (workspace: Workspace) => {
+  //   queryClient.invalidateQueries({ queryKey: ['/api/workspaces'] });
+  //   toast({
+  //     title: "Workspace created",
+  //     description: `Workspace "${workspace.name}" has been created successfully.`,
+  //   });
+  // };
 
 
 
   // Show workspace view if a workspace is selected
-  if (showWorkspaceView && selectedWorkspace) {
-    return (
-      <WorkspaceView 
-        workspace={selectedWorkspace} 
-        onBack={() => {
-          setShowWorkspaceView(false);
-          setSelectedWorkspace(null);
-        }} 
-      />
-    );
-  }
+  // if (showWorkspaceView && selectedWorkspace) {
+  //   return (
+  //     <WorkspaceView 
+  //       workspace={selectedWorkspace} 
+  //       onBack={() => {
+  //         setShowWorkspaceView(false);
+  //         setSelectedWorkspace(null);
+  //       }} 
+  //     />
+  //   );
+  // }
 
   return (
     <div className="flex-1 overflow-auto">
@@ -190,7 +196,7 @@ export default function ProjectsPage() {
                 </h3>
               </div>
               <div className="flex flex-wrap items-center gap-3">
-                <WorkspaceTemplates />
+                  <WorkspaceTemplates onCreateFromTemplate={handleCreateFromTemplate} />
                 <Button 
                   variant="outline" 
                   size="default" 
@@ -286,10 +292,10 @@ export default function ProjectsPage() {
                   style={{ 
                     background: `linear-gradient(135deg, ${workspace.color}10 0%, rgba(255,255,255,0.8) 50%, ${workspace.color}05 100%)`
                   }}
-                  onClick={() => {
-                    setSelectedWorkspace(workspace);
-                    setShowWorkspaceView(true);
-                  }}
+                  // onClick={() => {
+                  //   setSelectedWorkspace(workspace);
+                  //   setShowWorkspaceView(true);
+                  // }}
                 >
                   {/* Modern card header */}
                   <div className="relative p-8">
@@ -321,11 +327,11 @@ export default function ProjectsPage() {
                           workspaceId={workspace.id.toString()}
                           currentColor={workspace.color || '#3b82f6'}
                           workspaceName={workspace.name}
-                          onColorChanged={(newColor) => {
-                            updateWorkspace.mutate({ id: workspace.id, color: newColor });
-                          }}
+                          // onColorChanged={(newColor) => {
+                          // updateWorkspace.mutate({ id: workspace.id, color: newColor });
+                          // }}
                         />
-                        <button
+                        {/* <button
                           onClick={(e) => {
                             e.stopPropagation();
                             setEditingWorkspace(workspace);
@@ -335,8 +341,8 @@ export default function ProjectsPage() {
                           title={`Edit ${workspace.name}`}
                         >
                           <Edit className="w-4 h-4" />
-                        </button>
-                        <button
+                        </button> */}
+                        {/* <button
                           onClick={(e) => {
                             e.stopPropagation();
                             handleDeleteWorkspace(workspace.id.toString(), workspace.name);
@@ -345,7 +351,7 @@ export default function ProjectsPage() {
                           title={`Delete ${workspace.name}`}
                         >
                           <Trash2 className="w-4 h-4" />
-                        </button>
+                        </button> */}
                       </div>
                     </div>
                     {/* Modern card content */}
@@ -373,7 +379,7 @@ export default function ProjectsPage() {
                           </div>
                         </div>
                         <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-x-0 translate-x-2">
-                          <Button
+                          {/* <Button
                             onClick={(e) => {
                               e.stopPropagation();
                               setSelectedWorkspace(workspace);
@@ -383,7 +389,7 @@ export default function ProjectsPage() {
                           >
                             <FolderOpen className="w-4 h-4 mr-2" />
                             Open Workspace
-                          </Button>
+                          </Button> */}
                         </div>
                       </div>
                     </div>
@@ -533,100 +539,100 @@ function CreateWorkspaceModal({
 }
 
 // Edit Workspace Modal Component
-function EditWorkspaceModal({ 
-  isOpen, 
-  workspace,
-  onClose, 
-  onWorkspaceUpdated 
-}: { 
-  isOpen: boolean;
-  workspace: Workspace | null;
-  onClose: () => void;
-  onWorkspaceUpdated: (data: { id: number; name: string; description: string; color: string }) => void;
-}) {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [color, setColor] = useState('#3b82f6');
-  const [isUpdating, setIsUpdating] = useState(false);
+// function EditWorkspaceModal({ 
+//   isOpen, 
+//   workspace,
+//   onClose, 
+//   onWorkspaceUpdated 
+// }: { 
+//   isOpen: boolean;
+//   workspace: Workspace | null;
+//   onClose: () => void;
+//   onWorkspaceUpdated: (data: { id: number; name: string; description: string; color: string }) => void;
+// }) {
+//   const [name, setName] = useState('');
+//   const [description, setDescription] = useState('');
+//   const [color, setColor] = useState('#3b82f6');
+//   const [isUpdating, setIsUpdating] = useState(false);
 
-  // Initialize form with workspace data when modal opens
-  useEffect(() => {
-    if (workspace) {
-      setName(workspace.name || '');
-      setDescription(workspace.description || '');
-      setColor(workspace.color || '#3b82f6');
-    }
-  }, [workspace]);
+//   // Initialize form with workspace data when modal opens
+//   useEffect(() => {
+//     if (workspace) {
+//       setName(workspace.name || '');
+//       setDescription(workspace.description || '');
+//       setColor(workspace.color || '#3b82f6');
+//     }
+//   }, [workspace]);
 
-  const handleSubmit = async () => {
-    if (!name.trim() || !workspace) return;
+//   const handleSubmit = async () => {
+//     if (!name.trim() || !workspace) return;
 
-    setIsUpdating(true);
-    try {
-      onWorkspaceUpdated({
-        id: workspace.id,
-        name: name.trim(),
-        description: description.trim(),
-        color: color
-      });
-    } finally {
-      setIsUpdating(false);
-    }
-  };
+//     setIsUpdating(true);
+//     try {
+//       onWorkspaceUpdated({
+//         id: workspace.id,
+//         name: name.trim(),
+//         description: description.trim(),
+//         color: color
+//       });
+//     } finally {
+//       setIsUpdating(false);
+//     }
+//   };
 
-  if (!workspace) return null;
+//   if (!workspace) return null;
 
-  return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[500px]">
-        <DialogHeader>
-          <DialogTitle className="text-xl font-semibold">Edit Workspace</DialogTitle>
-        </DialogHeader>
-        <div className="space-y-6 py-4">
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-slate-700">Workspace Name</label>
-            <Input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Enter workspace name"
-              className="w-full"
-            />
-          </div>
+//   return (
+//     <Dialog open={isOpen} onOpenChange={onClose}>
+//       <DialogContent className="sm:max-w-[500px]">
+//         <DialogHeader>
+//           <DialogTitle className="text-xl font-semibold">Edit Workspace</DialogTitle>
+//         </DialogHeader>
+//         <div className="space-y-6 py-4">
+//           <div className="space-y-2">
+//             <label className="text-sm font-medium text-slate-700">Workspace Name</label>
+//             <Input
+//               value={name}
+//               onChange={(e) => setName(e.target.value)}
+//               placeholder="Enter workspace name"
+//               className="w-full"
+//             />
+//           </div>
           
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-slate-700">Description</label>
-            <Input
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Enter workspace description"
-              className="w-full"
-            />
-          </div>
+//           <div className="space-y-2">
+//             <label className="text-sm font-medium text-slate-700">Description</label>
+//             <Input
+//               value={description}
+//               onChange={(e) => setDescription(e.target.value)}
+//               placeholder="Enter workspace description"
+//               className="w-full"
+//             />
+//           </div>
 
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-slate-700">Color</label>
-            <div className="flex items-center gap-3">
-              <input
-                type="color"
-                value={color}
-                onChange={(e) => setColor(e.target.value)}
-                className="w-12 h-10 rounded border border-slate-300 cursor-pointer"
-              />
-              <span className="text-sm text-slate-600">{color}</span>
-            </div>
-          </div>
-        </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button 
-            onClick={handleSubmit}
-            disabled={!name.trim() || isUpdating}
-            className="bg-slate-800 hover:bg-slate-700"
-          >
-            {isUpdating ? 'Updating...' : 'Update Workspace'}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-}
+//           <div className="space-y-2">
+//             <label className="text-sm font-medium text-slate-700">Color</label>
+//             <div className="flex items-center gap-3">
+//               <input
+//                 type="color"
+//                 value={color}
+//                 onChange={(e) => setColor(e.target.value)}
+//                 className="w-12 h-10 rounded border border-slate-300 cursor-pointer"
+//               />
+//               <span className="text-sm text-slate-600">{color}</span>
+//             </div>
+//           </div>
+//         </div>
+//         <DialogFooter>
+//           <Button variant="outline" onClick={onClose}>Cancel</Button>
+//           <Button 
+//             onClick={handleSubmit}
+//             disabled={!name.trim() || isUpdating}
+//             className="bg-slate-800 hover:bg-slate-700"
+//           >
+//             {isUpdating ? 'Updating...' : 'Update Workspace'}
+//           </Button>
+//         </DialogFooter>
+//       </DialogContent>
+//     </Dialog>
+//   );
+// }
