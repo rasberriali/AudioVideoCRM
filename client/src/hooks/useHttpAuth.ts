@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 
-const HTTP_SERVER_URL = 'http://165.23.126.88:8888';
+const HTTP_SERVER_URL = 'https://lively-enjoyment-testing.up.railway.app';
 const AUTH_HEADER = 'Basic ' + btoa('aviuser:aviserver');
 
 interface User {
@@ -10,6 +10,7 @@ interface User {
   firstName: string;
   lastName: string;
   department: string;
+  role?: string;
   permissions: {
     accounting: boolean;
     projects: boolean;
@@ -55,7 +56,7 @@ export function useHttpAuth() {
       const requestBody = { username, password };
       console.log('Sending request:', requestBody);
       
-      const response = await fetch('/api/auth/custom-login', {
+      const response = await fetch(`/api/auth/custom-login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

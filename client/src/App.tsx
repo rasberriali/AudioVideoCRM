@@ -29,9 +29,16 @@ import { useHttpAuth } from "@/hooks/useHttpAuth";
 function App() {
 const httpAuth = useHttpAuth();
 
+
     // Use only HTTP authentication
-  const isAuthenticated = httpAuth.isAuthenticated;
-  const isLoading = httpAuth.isLoading;
+    /* TEMPORARY Bypass authentication for development
+    const isAuthenticated = httpAuth.isAuthenticated;
+    const isLoading = httpAuth.isLoading;
+   */
+  
+    // Bypass authentication for development
+  const isAuthenticated = true; // Always authenticated
+  const isLoading = false; // Not loading
   
 
   // Desktop App Logic - Show debug info at the top
@@ -71,7 +78,15 @@ const httpAuth = useHttpAuth();
        {/* <NotificationSocket /> */}
       <CrmLayout>
         <Switch>
-          <Route path="/" component={Dashboard} />
+        
+        {/* TEMPORARY bypass login */}
+        {/*<Route path="/" component={Dashboard} />*/}
+          <Route path="/">
+            {() => {
+              window.location.href = '/dashboard';
+              return null;
+            }}
+          </Route>
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/projects" component={Projects}/>
           <Route path="/tasks" component={TasksPage}/>
